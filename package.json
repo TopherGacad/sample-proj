@@ -1,0 +1,12 @@
+{
+  "name": "app_nextjs_web_client",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "postversion": " git push && git push --tags"
+  }
+}
