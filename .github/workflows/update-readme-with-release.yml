@@ -1,0 +1,33 @@
+name: Update README with Latest Release Notes
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Get Latest Release Notes
+        id: release
+        run: |
+          release_notes=$(curl --silent https://api.github.com/repos/your-repo/laravel-boilerplate/releases/latest | jq -r .body)
+          echo "Release Notes: $release_notes"
+          echo "::set-output name=release_notes::$release_notes"
+
+      - name: Update README with Latest Release Notes
+        run: |
+          sed -i "/## Latest Release/a ### What's New:\n\n${{ steps.release.outputs.release_notes }}" README.md
+          
+      - name: Commit updated README
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+          git add README.md
+          git commit -m "Update README with latest release notes"
+          git push
